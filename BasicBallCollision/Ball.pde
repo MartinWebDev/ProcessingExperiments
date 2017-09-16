@@ -35,7 +35,7 @@ class Ball {
     
     boolean DidCollide(Ball b) {
         // Can easily calculate if 2 circles collide by checking if their distance is less than or equal to the sum of their radiuses
-        PVector gap = PVector.sub(loc, b.loc); //<>//
+        PVector gap = PVector.sub(loc, b.loc);
         int dist = floor(gap.mag());
         
         if (dist < (radius + b.radius))

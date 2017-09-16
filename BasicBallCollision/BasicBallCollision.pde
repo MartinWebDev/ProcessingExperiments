@@ -1,5 +1,11 @@
 // Basic ball collision and bounce
-Ball[] balls = new Ball[50];
+Ball[] balls = new Ball[100];
+CollisionGrid grid;
+
+long collisionRunTime = 0;
+long collisionRunCount = 0;
+long collisionRunTotalTime = 0;
+long collisionAverageRunTime = 0;
 
 // TODO: Eventually I will divide the screen into chunks and optimise the collision detection, but I will draw the lines now.
 int rows = 10;
@@ -17,6 +23,8 @@ void setup() {
     for (int i = 0; i < balls.length; i++) {
         balls[i] = new Ball(floor(random(width)), floor(random(height)), floor(random(10, 20)));
     }
+    
+    grid = new CollisionGrid(cols, rows, width, height);
 }
 
 void draw() {
@@ -37,21 +45,35 @@ void draw() {
     }
     
     // Framerate
-    noFill();
-    stroke(80, 200, 50);
+    noStroke();
+    fill(80, 200, 50);
     textSize(18);
     textAlign(LEFT, TOP);
     text("FPS: " + floor(frameRate * 100) / 100, 10, 10);
     
     // Collision detection
+    long lStartTime = System.nanoTime();
     DetectCollisions();
     //DetectAllCollisions();
+    long lEndTime = System.nanoTime();
+    long output = lEndTime - lStartTime;
+    collisionRunTime = output / 1000000;
+    collisionRunTotalTime += collisionRunTime;
+    collisionRunCount++;
+    collisionAverageRunTime = collisionRunTotalTime / collisionRunCount;
+    
+    // Note the time taken
+    //println("Average time taken to run collision detection: " + collisionRunTotalTime / collisionRunCount);
     
     // Draw balls
     for (Ball b : balls) {
         b.Update();
         b.Render();
     }
+    
+    // Average collision time
+    fill(255, 0, 0);
+    text("AVG: " + collisionAverageRunTime, 10, 40);
 }
 
 void AddRepulsion(int i, int j) {
@@ -88,8 +110,8 @@ void DetectAllCollisions() {
                     AddRepulsion(i, j);
                     
                     // Use this as a way to break from BOTH loops. break; will only do the current loop
-                    i = balls.length;
-                    j = balls.length;
+                    //i = balls.length;
+                    //j = balls.length;
                 }
                 else {
                     balls[i].Collision(false);
@@ -111,17 +133,11 @@ void DetectCollisions() {
                 balls[i].Collision(true);
                 balls[j].Collision(true);
                 
-                // Calculate repulsion force for each colliding pair
-                PVector repel1 = PVector.sub(balls[i].loc, balls[j].loc);
-                repel1.normalize();
-                PVector repel2 = PVector.mult(repel1, -1);
-                
-                balls[i].Repel(repel1);
-                balls[j].Repel(repel2);
+                AddRepulsion(i, j);
                 
                 // Use this as a way to break from BOTH loops. break; will do the current
-                i = balls.length;
-                j = balls.length;
+                //i = balls.length;
+                //j = balls.length;
             }
             else {
                 balls[i].Collision(false);
