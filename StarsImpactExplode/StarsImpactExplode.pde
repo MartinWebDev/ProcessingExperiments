@@ -1,5 +1,5 @@
 Blackhole[] bhs = new Blackhole[1];
-//Explosion[] expl = new Explosion[1];
+ArrayList<Explosion> expl = new ArrayList<Explosion>();
 Star[] stars = new Star[10];
 
 void setup() {
@@ -16,11 +16,12 @@ void setup() {
 }
 
 void draw() {
-    //background(50);
+    background(50);
     
     // Update and draw stars
     for (int i = 0; i < stars.length; i++) {
         // Do collision detection here. 
+        Collisions();
         // If 2 stars collide, kill the stars, and replace with an explosion. 
         // An explosion will spread from the point of impact to a certain size, as each star intersects this explosion radius it is subjected to a repulsion force
         // The biggest the distance the weaker the force
@@ -32,10 +33,21 @@ void draw() {
         
         stars[i].Update(bhs, stars);
         stars[i].Render();
+        text(i, stars[i].pos.x + 3, stars[i].pos.y - 3);
     }
     
     // Draw blackholes
     for (int i = 0; i < bhs.length; i++) {
         bhs[i].Render();
+    }
+}
+
+void Collisions() {
+    for (int i = 0; i < stars.length - 1; i++) {
+        for (int j = i + 1; j < stars.length; j++) {
+            if (i != j && stars[i].CollidedWith(stars[j])) {
+                println("Bang! " + i + "-" + j);
+            }
+        }
     }
 }

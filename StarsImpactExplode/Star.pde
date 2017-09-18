@@ -1,18 +1,31 @@
 class Star {
     PVector pos;
+    PVector[] tail;
+    PVector lastPos;
     PVector vel;
     PVector acc;
     
     float mass;
     float life;
+    float collisionRadius;
     
     public Star(int x, int y, float m) {
         pos = new PVector(x, y);
         vel = PVector.random2D();
         acc = new PVector(0, 0);
         
+        tail = new PVector[5];
+        lastPos = pos;
+        
+        // Initialise tail with all the same to start with to avoid nulls
+        for (int i = 0; i < tail.length; i++) {
+            tail[i] = pos;
+        }
+        
         mass = m;
-        life = random(200, 400);
+        life = random(400, 800);
+        
+        collisionRadius = 5;
     }
     
     void AttractStars(Star[] stars) {
@@ -34,7 +47,7 @@ class Star {
         float d = force.mag();                                        // Distance between objects
         d = constrain(d, 10, 25.0);                                   // Limiting the distance to eliminate "extreme" results for very close or very far objects
         force.normalize();                                            // Normalize vector (distance doesn't matter here, we just want this vector for direction)
-        float strength = (/*G*/1 * /*M2*/m * /*M1*/mass) / (d * d);   // Calculate gravitional force magnitude
+        float strength = (/*G*/0.3 * /*M2*/m * /*M1*/mass) / (d * d);   // Calculate gravitional force magnitude
         force.mult(strength);                                         // Get force vector --> magnitude * direction
         
         return force;
@@ -44,7 +57,15 @@ class Star {
         return life <= 0;
     }
     
+    boolean CollidedWith(Star otherStar) {
+        PVector distVec = PVector.sub(pos, otherStar.pos);
+        return (distVec.mag() < (collisionRadius + otherStar.collisionRadius));
+    }
+    
     void Update(Blackhole[] bhs, Star[] stars) {
+        // Get last pos
+        lastPos = pos.copy();
+        
         // Reset acceleration ready for new calculations
         acc.mult(0);
         // New acceleration calc
@@ -62,9 +83,21 @@ class Star {
         life--;
     }
     
+    void Kill() {
+        life = 0;
+    }
+    
     void Render() {
         stroke(255);
         strokeWeight(1);
         point(pos.x, pos.y);
+        
+        // Draw and extend tail
+        for (int i = tail.length - 2; i >= 0; i--) {
+            int a = floor(map(i, 0, tail.length - 1, 255, 100));
+            stroke(255, a);
+            tail[i + 1] = i == 0 ? lastPos : tail[i];
+            point(tail[i].x, tail[i].y);
+        }
     }
 }
