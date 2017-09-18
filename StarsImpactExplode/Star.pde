@@ -53,6 +53,26 @@ class Star {
         return force;
     }
     
+    void RepelExplosions(ArrayList<Explosion> expl) {
+        for (Explosion exp : expl) {
+            PVector dist = PVector.sub(pos, exp.pos);
+            if (dist.mag() < exp.r) {
+                acc.add(Repel(exp.pos, exp.life / 5));
+            }
+        }
+    }
+    
+    PVector Repel(PVector repelFrom, float m) {
+        PVector force = PVector.sub(repelFrom, pos);                  // Calculate direction of force
+        float d = force.mag();                                        // Distance between objects
+        d = constrain(d, 10, 25.0);                                   // Limiting the distance to eliminate "extreme" results for very close or very far objects
+        force.normalize();                                            // Normalize vector (distance doesn't matter here, we just want this vector for direction)
+        float strength = (/*G*/0.3 * /*M2*/m * /*M1*/mass) / (d * d);   // Calculate gravitional force magnitude
+        force.mult(-strength);                                         // Get force vector --> magnitude * direction
+        
+        return force;
+    }
+    
     boolean IsDead() {
         return life <= 0;
     }
@@ -62,7 +82,7 @@ class Star {
         return (distVec.mag() < (collisionRadius + otherStar.collisionRadius));
     }
     
-    void Update(Blackhole[] bhs, Star[] stars) {
+    void Update(Blackhole[] bhs, Star[] stars, ArrayList<Explosion> expl) {
         // Get last pos
         lastPos = pos.copy();
         
@@ -71,6 +91,7 @@ class Star {
         // New acceleration calc
         AttractBlackholes(bhs);
         AttractStars(stars);
+        RepelExplosions(expl);
         
         // Add acc to vel and update position
         vel.add(acc);

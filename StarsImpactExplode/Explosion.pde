@@ -20,6 +20,9 @@ class Explosion {
     }
     
     void Render() {
-        
+        int alph = floor(map(life, 0, 100, 0, 100));
+        fill(200, alph);
+        noStroke();
+        ellipse(pos.x, pos.y, r * 2, r * 2);
     }
 }
