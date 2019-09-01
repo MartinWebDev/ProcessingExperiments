@@ -26,10 +26,11 @@ void draw() {
             //noiseDetail(4, detail);
             
             // Get new grey value
-            float  grey = noise(xOff, yOff) * 255;
+            float grey = noise(xOff, yOff) * 255;
             
             // Color the pixel at the index
-            pixels[x + y * width] = color(grey);
+            //pixels[x + y * width] = color(grey);
+            pixels[x + y * width] = grey <= 120 ? color(0, 200, 100) : color(0, 100, 200);
             
             yOff += 0.01;
         }

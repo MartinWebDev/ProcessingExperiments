@@ -1,9 +1,12 @@
 // Start with Dan Shiffman's rocket example as a base. 
-// Smart rocket
+Population population;
+
 void setup() {
-  size(400, 400);
+    size(1000, 800);
+    population = new Population();
 }
 
 void draw() {
-  background(255);
+    background(0);
+    population.update();
 }
