@@ -13,7 +13,7 @@ public class Population {
     public Population() {
         // Setup variables for simulation
         count = 0;
-        lifespan = 400;
+        lifespan = 800;
         
         // Create rocket population
         rockets = new Rocket[amount];
@@ -33,7 +33,7 @@ public class Population {
     }
     
     void createWalls() {
-        walls = new Wall[5];
+        walls = new Wall[7];
         
         // Edges
         walls[0] = new Wall(new PVector(width/2, 0), width, 10); // Top
@@ -42,7 +42,9 @@ public class Population {
         walls[3] = new Wall(new PVector(0, height/2), 10, height); // Left
         
         // Random obstacle
-        walls[4] = new Wall(new PVector(width/2, height/2), 300, 10);
+        walls[4] = new Wall(new PVector(300, 200), 300, 10);
+        walls[5] = new Wall(new PVector(700, 400), 600, 10);
+        walls[6] = new Wall(new PVector(300, 600), 600, 10);
     }
     
     void evaluate() {
@@ -62,9 +64,11 @@ public class Population {
         matingPool = new ArrayList<Rocket>();
         for (Rocket r : rockets) {
             // Success fitness boost!
-            if (r.complete) r.fitness *= 5;
+            if (r.complete) r.fitness *= 10;
+            
             // Failure fitness punishment!
-            if (r.dead) r.fitness /= 5;
+            // Punish them less the closer they were at time of death
+            if (r.dead) r.fitness /= dist(r.pos.x, r.pos.y, target.pos.x, target.pos.y);
             
             float n = r.fitness * 100;
             for (int i = 0; i < n; i++) {

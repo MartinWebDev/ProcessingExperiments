@@ -13,7 +13,7 @@ public class Rocket {
     }
     
     public Rocket(DNA dna_) {
-        pos = new PVector(width / 2, height / 5 * 4);
+        pos = new PVector(width / 2, height / 8 * 7);
         vel = new PVector();
         acc = new PVector();
         dna = dna_;
