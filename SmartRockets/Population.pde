@@ -58,7 +58,7 @@ public class Population {
             // Success fitness boost!
             if (r.complete) r.fitness *= 5;
             // Failure fitness punishment!
-            if (r.dead) r.fitness = 0.5;
+            if (r.dead) r.fitness /= 5;
             
             float n = r.fitness * 100;
             for (int i = 0; i < n; i++) {
@@ -85,7 +85,7 @@ public class Population {
     
     public PVector[] mutation(PVector[] genes_) {
         for (int i = 0; i < genes_.length; i++) {
-            if (random(1) <= 0.01) {
+            if (random(1) <= 0.05) {
                 genes_[i] = PVector.random2D();
                 genes_[i].setMag(0.2);
             }
