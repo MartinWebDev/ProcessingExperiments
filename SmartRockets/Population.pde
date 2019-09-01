@@ -23,7 +23,6 @@ public class Population {
         target = new Target(new PVector(width / 2, 50));
         
         // Obstacles to fuck 'em up!
-        walls = new Wall[1];
         createWalls();
     }
     
@@ -34,9 +33,16 @@ public class Population {
     }
     
     void createWalls() {
-        for (int i = 0; i < walls.length; i++) {
-            walls[i] = new Wall(new PVector(width/2, height/2), 300, 10);
-        }
+        walls = new Wall[5];
+        
+        // Edges
+        walls[0] = new Wall(new PVector(width/2, 0), width, 10); // Top
+        walls[1] = new Wall(new PVector(width, height/2), 10, height); // Right
+        walls[2] = new Wall(new PVector(width/2, height), width, 10); // Bottom
+        walls[3] = new Wall(new PVector(0, height/2), 10, height); // Left
+        
+        // Random obstacle
+        walls[4] = new Wall(new PVector(width/2, height/2), 300, 10);
     }
     
     void evaluate() {
@@ -114,6 +120,8 @@ public class Population {
             selection();
         }
         
+        stroke(255);
+        fill(255);
         text(Integer.toString(count), 10, 15);
         text(Float.toString(frameRate), 50, 15);
         
