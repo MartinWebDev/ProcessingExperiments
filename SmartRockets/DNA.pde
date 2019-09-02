@@ -1,20 +1,19 @@
 public class DNA {
-    PVector[] genes;
+    float[] genes;
     
     public DNA(int lifespan) {
-        genes = new PVector[lifespan];
+        genes = new float[lifespan];
         for (int i = 0; i < lifespan; i++) {
-            genes[i] = PVector.random2D();
-            genes[i].setMag(0.2);
+            genes[i] = random(-5, 5);
         }
     }
     
-    public DNA(PVector[] genes_) {
+    public DNA(float[] genes_) {
         genes = genes_;
     }
     
     public DNA crossover(DNA partner) {
-        PVector[] newdna = new PVector[genes.length];
+        float[] newdna = new float[genes.length];
         
         for (int i = 0; i < genes.length; i++) {
             if (random(1) < 0.5) {

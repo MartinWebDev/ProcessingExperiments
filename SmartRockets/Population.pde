@@ -13,7 +13,7 @@ public class Population {
     public Population() {
         // Setup variables for simulation
         count = 0;
-        lifespan = 800;
+        lifespan = 400;
         
         // Create rocket population
         rockets = new Rocket[amount];
@@ -93,11 +93,11 @@ public class Population {
         rockets = newPopulation;
     }
     
-    public PVector[] mutation(PVector[] genes_) {
+    public float[] mutation(float[] genes_) {
         for (int i = 0; i < genes_.length; i++) {
             if (random(1) <= 0.05) {
-                genes_[i] = PVector.random2D();
-                genes_[i].setMag(0.2);
+                genes_[i] = random(-5, 5);
+                //genes_[i].setMag(0.2);
             }
         }
         

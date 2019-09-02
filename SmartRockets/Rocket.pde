@@ -35,7 +35,8 @@ public class Rocket {
     
     public void update(int idx) {
         if (complete || dead) return;
-        applyForce(dna.genes[idx]);
+        applyForce(PVector.fromAngle(degrees
+        (acc.heading() + dna.genes[idx])));
         
         vel.add(acc);
         pos.add(vel);
