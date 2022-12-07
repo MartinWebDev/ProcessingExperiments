@@ -60,6 +60,11 @@ public class Population {
             r.fitness /= maxFitness;
         }
         
+        // TODO ENHANCEMENTS:
+        // Kill of current instance early if all dead.
+        // Reward based on the closest they got before death. Some rockets start strong but then turn around.
+        // Reward based on how quickly they reach the goal.
+        
         // Mating
         matingPool = new ArrayList<Rocket>();
         for (Rocket r : rockets) {
